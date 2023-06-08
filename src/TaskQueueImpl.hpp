@@ -7,13 +7,14 @@
 
 #include "TaskQueue.h"
 
-TaskQueue::TaskQueue()
+template<typename TaskType>
+TaskQueue<TaskType>::TaskQueue()
 {
 	worker = std::thread([&]
 		{
 			while (!done)
 			{
-				Task task;
+				TaskType task;
 				{
 					std::unique_lock<std::mutex> lock(mutex);
 					cv.wait(lock, [&] {return !m_tasks.empty() || done; });
@@ -26,7 +27,8 @@ TaskQueue::TaskQueue()
 		});
 }
 
-TaskQueue::~TaskQueue()
+template<typename TaskType>
+TaskQueue<TaskType>::~TaskQueue()
 {
 	{
 		std::lock_guard<std::mutex> lock(mutex);
@@ -36,7 +38,8 @@ TaskQueue::~TaskQueue()
 	worker.join();
 }
 
-void TaskQueue::push(Task task)
+template<typename TaskType>
+void TaskQueue<TaskType>::push(TaskType task)
 {
 	{
 		std::lock_guard<std::mutex> lock(mutex);
