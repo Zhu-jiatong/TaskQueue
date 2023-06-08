@@ -11,7 +11,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)src\TaskQueue.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\TaskQueueImpl.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
