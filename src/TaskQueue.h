@@ -20,7 +20,6 @@
 #include <mutex>
 #include <functional>
 
-template<typename TaskType = std::function<void()>>
 class TaskQueue
 {
 public:
@@ -29,16 +28,15 @@ public:
 	TaskQueue();
 	~TaskQueue();
 
-	void push(TaskType task);
+	void push(Task task);
 
 private:
-	std::queue<TaskType> m_tasks;
+	std::queue<Task> m_tasks;
 	std::condition_variable cv;
 	std::mutex mutex;
 	std::thread worker;
 	bool done = false;
 };
 
-#include <TaskQueueImpl.hpp>
-
 #endif
+

@@ -6,8 +6,9 @@
 
 #include "TaskQueue.h"
 #include <iostream>
+#include <WiFi.h>
 
-TaskQueue<> MyTasks;
+TaskQueue MyTasks;
 
 // the setup function runs once when you press reset or power the board
 void setup()
