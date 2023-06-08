@@ -9,15 +9,15 @@
 
 TaskQueue::TaskQueue()
 {
-	worker = std::thread([&]
+	m_worker = std::thread([&]
 		{
-			while (!done)
+			while (!m_done)
 			{
 				Task task;
 				{
-					std::unique_lock<std::mutex> lock(mutex);
-					cv.wait(lock, [&] {return !m_tasks.empty() || done; });
-					if (done && m_tasks.empty()) return;
+					std::unique_lock<std::mutex> lock(m_mutex);
+					m_cv.wait(lock, [&] {return !m_tasks.empty() || m_done; });
+					if (m_done && m_tasks.empty()) return;
 					task = std::move(m_tasks.front());
 					m_tasks.pop();
 				}
@@ -29,18 +29,18 @@ TaskQueue::TaskQueue()
 TaskQueue::~TaskQueue()
 {
 	{
-		std::lock_guard<std::mutex> lock(mutex);
-		done = true;
+		std::lock_guard<std::mutex> lock(m_mutex);
+		m_done = true;
 	}
-	cv.notify_one();
-	worker.join();
+	m_cv.notify_one();
+	m_worker.join();
 }
 
 void TaskQueue::push(Task task)
 {
 	{
-		std::lock_guard<std::mutex> lock(mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
 		m_tasks.emplace(std::move(task));
 	}
-	cv.notify_one();
+	m_cv.notify_one();
 }

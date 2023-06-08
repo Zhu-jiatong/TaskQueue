@@ -32,10 +32,10 @@ public:
 
 private:
 	std::queue<Task> m_tasks;
-	std::condition_variable cv;
-	std::mutex mutex;
-	std::thread worker;
-	bool done = false;
+	std::condition_variable m_cv;
+	std::mutex m_mutex;
+	std::thread m_worker;
+	bool m_done = false;
 };
 
 #endif
