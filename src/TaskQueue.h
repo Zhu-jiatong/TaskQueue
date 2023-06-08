@@ -24,6 +24,8 @@ template<typename TaskType = std::function<void()>>
 class TaskQueue
 {
 public:
+	using Task = std::function<void()>;
+
 	TaskQueue();
 	~TaskQueue();
 
