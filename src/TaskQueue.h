@@ -19,13 +19,14 @@
 #include <condition_variable>
 #include <mutex>
 #include <functional>
+#include <esp_pthread.h>
 
 class TaskQueue
 {
 public:
 	using Task = std::function<void()>;
 
-	TaskQueue();
+	TaskQueue(size_t stackSizeBytes = esp_pthread_get_default_config().stack_size);
 	~TaskQueue();
 
 	void push(Task task);

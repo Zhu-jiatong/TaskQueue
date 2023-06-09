@@ -7,9 +7,14 @@
 
 #include "TaskQueue.h"
 
-TaskQueue::TaskQueue()
+TaskQueue::TaskQueue(size_t stackSizeBytes)
 {
-	m_worker = std::thread([&]
+	esp_pthread_cfg_t threadConfig= esp_pthread_get_default_config();
+	threadConfig.stack_size = stackSizeBytes;
+	esp_pthread_set_cfg(&threadConfig);
+
+	m_worker = std::thread(
+		[&]
 		{
 			while (!m_done)
 			{
