@@ -7,7 +7,7 @@
 #include "TaskQueue.h"
 #include <iostream>
 
-TaskQueue MyTasks;
+TaskQueue MyTasks(2048, [] {std::cout << "Queue empty\n"; });
 
 // the setup function runs once when you press reset or power the board
 void setup()

@@ -26,7 +26,8 @@ class TaskQueue
 public:
 	using Task = std::function<void()>;
 
-	TaskQueue(size_t stackSizeBytes = esp_pthread_get_default_config().stack_size);
+	TaskQueue(size_t stackSizeBytes = esp_pthread_get_default_config().stack_size,
+		std::function<void()> onQueueEmpty = nullptr);
 	~TaskQueue();
 
 	void push(Task task);
@@ -37,6 +38,7 @@ private:
 	std::mutex m_mutex;
 	std::thread m_worker;
 	bool m_done = false;
+	std::function<void()> m_onQueueEmpty;
 };
 
 #endif
